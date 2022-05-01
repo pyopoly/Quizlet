@@ -1,0 +1,1011 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "A COMP 4537 Team M1 quiz API",
+    "version": "1.0.0",
+    "title": "Quiz API"
+  },
+  "host": "jacknteg.com",
+  "basePath": "/4537/termproject/API/V1/",
+  "tags": [{
+      "name": "Quiz",
+      "description": "Quiz is the top level of this Quiz API."
+    },
+    {
+      "name": "Question",
+      "description": "A quiz contains questions as its children."
+    },
+    {
+      "name": "Answer",
+      "description": "Each question has answers as their children."
+    },
+    {
+      "name": "Endpoint Counters",
+      "description": "Everytime an endpoint is accessed, the corresponding counter is increased by 1."
+    },
+    {
+      "name": "Removed Endpoints",
+      "description": "The endpoints below were implemented but later removed in order to meet the requirement of 'ClientSide muse use every endpoint of the api'. The Endpoints below did not end up being used by our ClientSide"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/post/quiz": {
+      "post": {
+        "tags": [
+          "Quiz"
+        ],
+        "summary": "Create one quiz.",
+        "description": "To use this endpoint, use req.body for quiz info (name, description, author). Name cannot be null.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "A Quiz object in the request body.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Quiz"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Create new resource successfully",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/post/question": {
+      "post": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Create one question.",
+        "description": "To use this endpoint, quizID of the question is required",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "A Question object in the request body.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Question"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Create new resource successfully",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/post/answers": {
+      "post": {
+        "tags": [
+          "Answer"
+        ],
+        "summary": "Create mutiple answers at once.",
+        "description": "Post an array of answers. Answers have the 'correct' array which is a boolean of 0 or 1. QuestionID and QuizID are also required",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "Answers object in the request body.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Answers"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Create new resource successfully",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/counters": {
+      "get": {
+        "tags": [
+          "Endpoint Counters"
+        ],
+        "summary": "Get the counter for an endpoint",
+        "description": "Every endpoint has a counter for how many times this endpoint has been accessed.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/EndpointCounter"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/quiz&all-questions-by-quizID": {
+      "get": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Return the entire quiz by ID.",
+        "description": "This GET Request returns everything in a quiz, including quizName, all Questions, and all their answers, by searching quizID.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "id",
+          "description": "ID of the quiz.",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/EntireQuiz"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/quizzes": {
+      "get": {
+        "tags": [
+          "Quiz"
+        ],
+        "summary": "Get all quizzes",
+        "description": "Get all the information of all quizzes. No params needed.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Quiz"
+              },
+              "example": [{
+                "quizID": 1,
+                "quizName": "Pets",
+                "description": null,
+                "author": null
+              }, {
+                "quizID": 2,
+                "quizName": "foods",
+                "description": "about food",
+                "author": "John"
+              }]
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/quiz": {
+      "get": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Get one quiz by ID.",
+        "description": "This GET Request returns one quiz.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "id",
+          "description": "ID of the quiz.",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "example": {
+                "quizID": 1,
+                "quizName": "Pets",
+                "description": "a quiz about Pets",
+                "author": null
+              }
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/quizIDByName": {
+      "get": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Get quizID by the name of the Quiz",
+        "description": "Returns an int for the ID of the quiz using the quizName",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "quizName",
+          "description": "Name of the quiz. Upper or lowercase does not matter.",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "example": {
+                "quizID": 1
+              }
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/questions": {
+      "get": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Get all questions in a quiz",
+        "description": "Returns all the questions in a quiz by the quiz ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "id",
+          "description": "ID of the quiz.",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              },
+              "example": [{
+                "questionID": 2,
+                "question": "How many legs do dogs have?",
+                "quizID": 1
+              }, {
+                "questionID": 3,
+                "question": "Are cats better than dogs?",
+                "quizID": 1
+              }]
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/answers": {
+      "get": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Get all answers of one question.",
+        "description": "Returns all the answers of a question by questionID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "id",
+          "description": "ID of the question.",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Answer"
+              },
+              "example": [{
+                "answerID": 7,
+                "answer": "3 legs",
+                "correct": 0,
+                "questionID": 2,
+                "quizID": 1
+              }, {
+                "answerID": 8,
+                "answer": "4 legs",
+                "correct": 1,
+                "questionID": 2,
+                "quizID": 1
+              }, {
+                "answerID": 9,
+                "answer": "No legs",
+                "correct": 0,
+                "questionID": 2,
+                "quizID": 1
+              }]
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/get/questions&answers": {
+      "get": {
+        "tags": [
+          "Question",
+          "Answer"
+        ],
+        "summary": "Combines question and its answers.",
+        "description": "Returns one question and its answers by questionID.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "query",
+          "name": "id",
+          "description": "ID of the question.",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "example": {
+                "question": "How many legs do dogs have?",
+                "answers": [{
+                  "answer": "3 legs",
+                  "correct": 0
+                }, {
+                  "answer": "4 legs",
+                  "correct": 1
+                }, {
+                  "answer": "No legs",
+                  "correct": 0
+                }]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/put/quiz": {
+      "put": {
+        "tags": [
+          "Quiz"
+        ],
+        "summary": "Update one quiz.",
+        "description": "Update one quiz by quizID. If description and author are undefined, then null will be inserted into DB. QuizName has to be unique",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "A quiz object, descrtion and author can be empty. Only quizID and quizName are required. QuizName has to be unique",
+          "required": true,
+          "schema": {
+            "example": {
+              "quizID": 1,
+              "quizName": "Pets",
+              "description": "a quiz about Pets",
+              "author": null
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Rejected, Duplicate entry 'example' for key 'quizName'"
+          }
+        }
+      }
+    },
+    "/patch/quizName": {
+      "patch": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Update the name of one quiz.",
+        "description": "Update name of a quiz by seatching quizName.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "A quiz object, descrtion and author can be empty. Only quizName is required.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "quizName",
+              "newName"
+            ],
+            "properties": {
+              "quizName": {
+                "type": "string",
+                "example": "Pets"
+              },
+              "newName": {
+                "type": "string",
+                "example": "Food"
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/patch/question": {
+      "patch": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Update one question by ID.",
+        "description": "Update one Question by its ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "A new quesition object.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "questionID",
+              "newQuestion"
+            ],
+            "properties": {
+              "questionID": {
+                "type": "integer",
+                "example": 1
+              },
+              "newQuestion": {
+                "type": "string",
+                "example": "Can cats fly?"
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/patch/answer": {
+      "patch": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Update one answer by ID.",
+        "description": "Update one Answer by its ID, the quiz and question this answer belongs to cannot be changed.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "Answer object with answerID, newAnswer, and newCorrect.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "answerID",
+              "newAnswer",
+              "newCorrect"
+            ],
+            "properties": {
+              "answerID": {
+                "type": "integer",
+                "example": 1
+              },
+              "newAnswer": {
+                "type": "string",
+                "example": "I am wrong"
+              },
+              "newCorrect": {
+                "type": "integer",
+                "example": 0
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/delete/answer": {
+      "delete": {
+        "tags": [
+          "Removed Endpoints"
+        ],
+        "summary": "Delete one answer by its ID.",
+        "description": "Delete one Answer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "object in req.body with answerID as key.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "answerID"
+            ],
+            "properties": {
+              "answerID": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/delete/question": {
+      "delete": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Delete one question by its ID.",
+        "description": "Delete one Question. All of this question's children answers will also be deleted.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "object in req.body with questionID as key.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "questionID"
+            ],
+            "properties": {
+              "questionID": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    },
+    "/delete/quiz": {
+      "delete": {
+        "tags": [
+          "Quiz"
+        ],
+        "summary": "Delete one quiz by its ID.",
+        "description": "Delete one Question. All of this quiz's children questions and answers will also be deleted.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "req.body",
+          "description": "object in req.body with quizID as key.",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": [
+              "quizID"
+            ],
+            "properties": {
+              "quizID": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DB_Response"
+            }
+          },
+          "500": {
+            "description": "Server error. Request failed."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Quiz": {
+      "type": "object",
+      "required": [
+        "quizName"
+      ],
+      "properties": {
+        "quizName": {
+          "type": "string",
+          "example": "Pets"
+        },
+        "description": {
+          "type": "string",
+          "example": "a quiz about Pets"
+        },
+        "author": {
+          "type": "string",
+          "example": "John"
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": [
+        "question",
+        "quizID"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "example": "How many legs does a dog have?"
+        },
+        "quizID": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
+    "Answer": {
+      "type": "object",
+      "required": [
+        "answer",
+        "correct",
+        "questionID",
+        "quizID"
+      ],
+      "properties": {
+        "answer": {
+          "type": "string",
+          "example": "No legs"
+        },
+        "correct": {
+          "type": "integer",
+          "example": 0
+        },
+        "questionID": {
+          "type": "integer",
+          "example": 2
+        },
+        "quizID": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
+    "Answers": {
+      "type": "object",
+      "required": [
+        "questionID",
+        "quizID",
+        "answers",
+        "correct"
+      ],
+      "properties": {
+        "questionID": {
+          "type": "integer",
+          "example": 1
+        },
+        "quizID": {
+          "type": "integer",
+          "example": 1
+        },
+        "answers": {
+          "example": ["1 leg", "4 legs", "No legs"]
+        },
+        "correct": {
+          "example": [0, 1, 0]
+        }
+      }
+    },
+    "DB_Response": {
+      "type": "object",
+      "properties": {
+        "insertId": {
+          "type": "integer",
+          "example": 86
+        },
+        "affectedRows": {
+          "type": "integer",
+          "example": 1
+        },
+        "changedRows": {
+          "type": "integer",
+          "example": 1
+        },
+        "fieldCount": {
+          "type": "integer",
+          "example": 0
+        },
+        "serverStatus": {
+          "type": "integer",
+          "example": 2
+        },
+        "warningCount": {
+          "type": "integer",
+          "example": 0
+        },
+        "message": {
+          "type": "string",
+          "example": ""
+        },
+        "protocol41": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "EntireQuiz": {
+      "type": "object",
+      "properties": {
+        "quizID": {
+          "type": "integer",
+          "example": 1
+        },
+        "quizName": {
+          "type": "string",
+          "example": "Pets"
+        },
+        "description": {
+          "type": "string",
+          "example": "a quiz about Pets"
+        },
+        "author": {
+          "type": "string",
+          "example": null
+        },
+        "questions": {
+          "example": [{
+              "questionID": 2,
+              "question": "How many legs do dogs have?",
+              "quizID": 1
+            },
+            {
+              "questionID": 4,
+              "question": "Who is the fastest?",
+              "quizID": 1
+            }
+          ]
+        },
+        "answers": {
+          "example": [
+            [{
+              "answerID": 7,
+              "answer": "3 legs",
+              "correct": 0,
+              "questionID": 2,
+              "quizID": 1
+            }, {
+              "answerID": 8,
+              "answer": "4 legs",
+              "correct": 1,
+              "questionID": 2,
+              "quizID": 1
+            }, {
+              "answerID": 9,
+              "answer": "No legs",
+              "correct": 0,
+              "questionID": 2,
+              "quizID": 1
+            }],
+            [{
+              "answerID": 11,
+              "answer": "Humans",
+              "correct": 0,
+              "questionID": 4,
+              "quizID": 1
+            }, {
+              "answerID": 12,
+              "answer": "Cheetah",
+              "correct": 1,
+              "questionID": 4,
+              "quizID": 1
+            }, {
+              "answerID": 13,
+              "answer": "Turtles",
+              "correct": 0,
+              "questionID": 4,
+              "quizID": 1
+            }]
+          ]
+        }
+      }
+    },
+    "EndpointCounter": {
+      "type": "object",
+      "properties": {
+        "/get/counters": {
+          "type": "integer",
+          "example": 3
+        },
+        "/get/quizzes": {
+          "type": "integer",
+          "example": 1
+        },
+        "/post/quiz": {
+          "type": "integer",
+          "example": 2
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "ClientSide Website",
+    "url": "https://tommywork.lovestoblog.com/COMP4537/clientSide/index.html"
+  }
+}

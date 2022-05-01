@@ -1,0 +1,52 @@
+CREATE TABLE Quizzes (
+    quizID int NOT NULL AUTO_INCREMENT,
+    quizName varchar(50) NOT NULL,
+    description varchar(300),
+    author varchar(50),
+    PRIMARY KEY (quizID),
+    UNIQUE (`quizName`)
+) ENGINE=INNODB;
+
+CREATE TABLE Questions (
+    questionID int NOT NULL AUTO_INCREMENT,
+    question varchar(300) NOT NULL,
+    quizID int NOT NULL,
+    PRIMARY KEY (questionID),
+    FOREIGN KEY (quizID) REFERENCES Quizzes(quizID)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB;
+
+
+CREATE TABLE Answers (
+    answerID int NOT NULL AUTO_INCREMENT,
+    answer varchar(300) NOT NULL,
+    correct SMALLINT NOT NULL,
+    questionID int NOT NULL,
+    quizID int NOT NULL,
+    PRIMARY KEY (answerID),
+    FOREIGN KEY (quizID) REFERENCES Quizzes(quizID)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (questionID) REFERENCES Questions(questionID)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+
+
+
+INSERT INTO Quizzes (quizName) VALUES ("Pets");
+INSERT INTO Quizzes (quizName) VALUES ("Food");
+INSERT INTO Questions (question, quizID) VALUES ("How many legs do dogs have?", 1);
+INSERT INTO Answers (answer, correct, questionID, quizID) VALUES ("3 legs", 0, 1, 1);
+INSERT INTO Answers (answer, correct, questionID, quizID) VALUES ("4 legs", 1, 1, 1);
+INSERT INTO Answers (answer, correct, questionID, quizID) VALUES ("No legs", 0, 1, 1);
+
+
+
+
+UPDATE `quizzes` SET `description` = 'I love doggos woof', `author` = 'Tommy' WHERE `quizzes`.`quizID` = 1;
+UPDATE `quizzes` SET `description` = 'Food wars episode 1 goes crazy', `author` = 'Jack' WHERE `quizzes`.`quizID` = 2;
+
+DB result example
+{"fieldCount":0,"affectedRows":1,"insertId":10,"serverStatus":2,"warningCount":0,"message":"","protocol41":true,"changedRows":0}

@@ -1,0 +1,28 @@
+.center-div {
+    margin-left: auto;
+    margin-right: auto;
+}
+.list {
+    list-style: none;
+}
+
+@media only screen and (min-width: 600.1px) {
+    #mainCard {
+        width: 30em;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    #mainCard {
+        width: 20em !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+
+    }
+
+    #ulQuizList {
+        padding-left: 0em;
+        margin: auto;
+    }
+}
